@@ -17,7 +17,7 @@ Masih banyak kekurangan dalam alur aplikasi dan konsep, kami sangat menerima sar
     - Pada proses taaruf, admin akan mencetak surat undangan kepada karyawan yang sudah sama sama cocok, untuk dipertemukan dalam sesi konsultasi agama.
 - Halaman Karyawan :
     - Sebelum login, karyawan harus masuk menu daftar dahulu, dimana akan diminta mengisi NIK yang terhubung pada API data kepegawaian
-    - Jika tidak ada NIK yang sesuai, karyawan tidak bisa daftar, untuk proses daftar bisa membacara QnA yang ada dihalaman frontpage.
+    - Jika tidak ada NIK yang sesuai, karyawan tidak bisa daftar, untuk proses daftar bisa membaca QnA yang ada dihalaman frontpage.
     - Pada halaman dashboard karyawan, setiap user yang masuk harus mengisi profile lengkap terlebih dahulu agar menu taaruf dan progress
     - Silahkan eksplor menu taaruf dan progress, karena menu ini berfungsi untuk menghubungkan kepada calon yang diinginkan.
 
