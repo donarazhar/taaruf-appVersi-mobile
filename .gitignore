@@ -1,19 +1,39 @@
-/.phpunit.cache
-/node_modules
-/public/build
-/public/hot
-/public/storage
-/storage/*.key
-/vendor
+# Old Laravel 10 Application (archived)
+/old/
+
+# Dependencies
+node_modules/
+/apps/*/node_modules/
+/apps/api/vendor/
+
+# Environment files
 .env
 .env.backup
 .env.production
-.phpunit.result.cache
-Homestead.json
-Homestead.yaml
-auth.json
-npm-debug.log
-yarn-error.log
+.env.local
+/apps/*/.env
+
+# Build outputs
+/apps/web/dist/
+/apps/api/public/build/
+/apps/api/public/hot/
+/apps/api/public/storage/
+/apps/api/storage/*.key
+
+# IDE
 /.fleet
 /.idea
 /.vscode
+
+# Logs
+npm-debug.log
+yarn-error.log
+
+# Cache
+.phpunit.cache
+.phpunit.result.cache
+/apps/api/bootstrap/cache/*
+
+# OS files
+.DS_Store
+Thumbs.db

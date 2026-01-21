@@ -1,16 +1,19 @@
 {
+    "name": "taaruf-monorepo",
+    "version": "2.10.2025",
     "private": true,
-    "type": "module",
+    "description": "Aplikasi Taaruf Online - YPI Al Azhar",
+    "workspaces": [
+        "apps/*"
+    ],
     "scripts": {
-        "dev": "vite",
-        "build": "vite build"
+        "api:dev": "cd apps/api && php artisan serve",
+        "web:dev": "cd apps/web && npm run dev",
+        "mobile:dev": "cd apps/mobile && npm start",
+        "api:migrate": "cd apps/api && php artisan migrate",
+        "api:seed": "cd apps/api && php artisan db:seed",
+        "install:all": "npm install && cd apps/web && npm install && cd ../mobile && npm install"
     },
-    "devDependencies": {
-        "axios": "^1.6.1",
-        "laravel-vite-plugin": "^1.0.0",
-        "vite": "^5.0.0"
-    },
-    "dependencies": {
-        "bootstrap": "^5.3.2"
-    }
+    "author": "Donar Azhar <donarazhar@gmail.com>",
+    "license": "MIT"
 }
