@@ -4,15 +4,17 @@
     "private": true,
     "description": "Aplikasi Taaruf Online - YPI Al Azhar",
     "workspaces": [
-        "apps/*"
+        "api",
+        "mobile",
+        "web"
     ],
     "scripts": {
-        "api:dev": "cd apps/api && php artisan serve",
-        "web:dev": "cd apps/web && npm run dev",
-        "mobile:dev": "cd apps/mobile && npm start",
-        "api:migrate": "cd apps/api && php artisan migrate",
-        "api:seed": "cd apps/api && php artisan db:seed",
-        "install:all": "npm install && cd apps/web && npm install && cd ../mobile && npm install"
+        "api:dev": "cd api && php artisan serve",
+        "web:dev": "cd web && npm run dev",
+        "mobile:dev": "cd mobile && npm start",
+        "api:migrate": "cd api && php artisan migrate",
+        "api:seed": "cd api && php artisan db:seed",
+        "install:all": "npm install && cd web && npm install && cd ../mobile && npm install"
     },
     "author": "Donar Azhar <donarazhar@gmail.com>",
     "license": "MIT"

@@ -13,36 +13,39 @@ Aplikasi ini bertujuan untuk menghubungkan semua pegawai YPI Al Azhar yang berst
 Aplikasi telah ditransformasi dari Laravel 10 (Blade + MySQL) menjadi arsitektur **monorepo modern**:
 
 ```
-taaruf_v2.10.2025/
-├── apps/
-│   ├── api/        # Laravel 12 + PostgreSQL + Sanctum API
-│   ├── web/        # React + Vite
-│   └── mobile/     # Expo (React Native)
-└── old/            # Aplikasi Laravel 10 lama (archived)
+taaruf/
+├── api/        # Laravel 12 + PostgreSQL + Sanctum API
+├── web/        # React + Vite
+└── mobile/     # Expo (React Native)
 ```
 
 ## 🚀 Tech Stack
 
 ### API Backend
+
 - **Framework:** Laravel 12
 - **Database:** PostgreSQL 15+
 - **Authentication:** Laravel Sanctum (Token-based)
 - **PHP:** 8.2+
 
 ### Web Frontend
+
 - **Framework:** React 19
 - **Build Tool:** Vite 6
 - **Routing:** React Router (to be implemented)
 - **HTTP Client:** Axios (to be implemented)
 
 ### Mobile App
+
 - **Framework:** React Native + Expo
 - **Navigation:** React Navigation (to be implemented)
 
 ## 📦 Instalasi
 
 ### Prerequisites
+
 Pastikan sudah terinstall:
+
 - PHP 8.2+
 - Composer
 - Node.js 18+
@@ -50,20 +53,23 @@ Pastikan sudah terinstall:
 - Git
 
 ### 1. Clone Repository
+
 ```bash
 git clone https://github.com/donarazhar/taaruf_v2.10.2025.git
 cd taaruf_v2.10.2025
 ```
 
 ### 2. Setup Database
+
 ```sql
 # Buat database PostgreSQL
 CREATE DATABASE taaruf_db;
 ```
 
 ### 3. Setup API Backend
+
 ```bash
-cd apps/api
+cd api
 
 # Install dependencies
 composer install
@@ -82,8 +88,9 @@ php artisan db:seed
 ```
 
 ### 4. Setup Web Frontend
+
 ```bash
-cd apps/web
+cd web
 
 # Install dependencies (sudah terinstall)
 npm install
@@ -93,8 +100,9 @@ npm run dev
 ```
 
 ### 5. Setup Mobile App
+
 ```bash
-cd apps/mobile
+cd mobile
 
 # Install dependencies (sudah terinstall)
 npm install
@@ -108,44 +116,48 @@ npm start
 ### Jalankan semua apps secara bersamaan:
 
 **Terminal 1 - API:**
+
 ```bash
 npm run api:dev
 # API akan berjalan di http://localhost:8000
 ```
 
 **Terminal 2 - Web:**
+
 ```bash
 npm run web:dev
 # Web akan berjalan di http://localhost:5173
 ```
 
 **Terminal 3 - Mobile:**
+
 ```bash
 npm run mobile:dev
 # Scan QR code dengan Expo Go app di smartphone
 ```
 
 ### Atau gunakan scripts individual:
+
 ```bash
 # API
-cd apps/api && php artisan serve
+cd api && php artisan serve
 
 # Web
-cd apps/web && npm run dev
+cd web && npm run dev
 
 # Mobile
-cd apps/mobile && npm start
+cd mobile && npm start
 ```
 
 ## 📡 API Endpoints
 
-| Method | Endpoint | Deskripsi | Auth |
-|--------|----------|-----------|------|
-| POST | `/api/auth/register` | Registrasi karyawan | ❌ |
-| POST | `/api/auth/login` | Login karyawan | ❌ |
-| POST | `/api/auth/admin/login` | Login admin | ❌ |
-| POST | `/api/auth/logout` | Logout | ✅ |
-| GET | `/api/profile` | Get profile user | ✅ |
+| Method | Endpoint                | Deskripsi           | Auth |
+| ------ | ----------------------- | ------------------- | ---- |
+| POST   | `/api/auth/register`    | Registrasi karyawan | ❌   |
+| POST   | `/api/auth/login`       | Login karyawan      | ❌   |
+| POST   | `/api/auth/admin/login` | Login admin         | ❌   |
+| POST   | `/api/auth/logout`      | Logout              | ✅   |
+| GET    | `/api/profile`          | Get profile user    | ✅   |
 
 **Auth:** ✅ = Memerlukan Bearer Token
 
@@ -171,6 +183,7 @@ Aplikasi menggunakan PostgreSQL dengan 13 tabel utama:
 ## 📝 Fitur Utama
 
 ### Admin Panel
+
 - Master Data (Artikel, Youtube, Data Karyawan)
 - Approve data karyawan yang mendaftar
 - Daftar QnA
@@ -178,6 +191,7 @@ Aplikasi menggunakan PostgreSQL dengan 13 tabel utama:
 - Cetak surat undangan konsultasi
 
 ### Karyawan
+
 - Registrasi dengan NIK (terhubung API kepegawaian)
 - Profile lengkap
 - Menu Taaruf (mencari kandidat)
@@ -188,17 +202,19 @@ Aplikasi menggunakan PostgreSQL dengan 13 tabel utama:
 ## 🛠️ Development
 
 ### Database Migration
+
 ```bash
 npm run api:migrate
 # atau
-cd apps/api && php artisan migrate
+cd api && php artisan migrate
 ```
 
 ### Database Seeding
+
 ```bash
 npm run api:seed
 # atau
-cd apps/api && php artisan db:seed
+cd api && php artisan db:seed
 ```
 
 ## 📧 Kontak
@@ -212,5 +228,3 @@ cd apps/api && php artisan db:seed
 MIT
 
 ---
-
-> **Note:** Aplikasi Laravel 10 lama (Blade templates) sudah dipindahkan ke folder `old/` dan tidak digunakan lagi. Aplikasi baru menggunakan arsitektur API + SPA + Mobile App.
