@@ -3,868 +3,573 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Taaruf Deployment Guide</title>
+    <title>Taaruf App - Deployment Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
-    <style>
-      :root {
-        --primary: #6366f1;
-        --primary-dark: #4f46e5;
-        --secondary: #10b981;
-        --bg-dark: #0f172a;
-        --bg-card: #1e293b;
-        --bg-code: #0d1117;
-        --text-primary: #f1f5f9;
-        --text-secondary: #94a3b8;
-        --border: #334155;
-        --accent-green: #22c55e;
-        --accent-blue: #3b82f6;
-        --accent-purple: #a855f7;
-        --accent-orange: #f97316;
-      }
-
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      body {
-        font-family:
-          "Inter",
-          -apple-system,
-          BlinkMacSystemFont,
-          sans-serif;
-        background: var(--bg-dark);
-        color: var(--text-primary);
-        line-height: 1.7;
-        min-height: 100vh;
-      }
-
-      /* Header */
-      .header {
-        background: linear-gradient(
-          135deg,
-          var(--primary) 0%,
-          var(--accent-purple) 100%
-        );
-        padding: 60px 20px;
-        text-align: center;
-        position: relative;
-        overflow: hidden;
-      }
-
-      .header::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-        opacity: 0.3;
-      }
-
-      .header h1 {
-        font-size: 2.5rem;
-        font-weight: 700;
-        margin-bottom: 10px;
-        position: relative;
-        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-      }
-
-      .header p {
-        font-size: 1.1rem;
-        opacity: 0.9;
-        position: relative;
-      }
-
-      .badge {
-        display: inline-block;
-        background: rgba(255, 255, 255, 0.2);
-        padding: 6px 16px;
-        border-radius: 20px;
-        font-size: 0.85rem;
-        margin-top: 15px;
-        backdrop-filter: blur(10px);
-      }
-
-      /* Navigation */
-      .nav {
-        background: var(--bg-card);
-        border-bottom: 1px solid var(--border);
-        padding: 15px 20px;
-        position: sticky;
-        top: 0;
-        z-index: 100;
-        backdrop-filter: blur(10px);
-      }
-
-      .nav-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        display: flex;
-        gap: 20px;
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-
-      .nav a {
-        color: var(--text-secondary);
-        text-decoration: none;
-        font-size: 0.9rem;
-        font-weight: 500;
-        padding: 8px 16px;
-        border-radius: 8px;
-        transition: all 0.2s;
-      }
-
-      .nav a:hover {
-        color: var(--text-primary);
-        background: rgba(99, 102, 241, 0.2);
-      }
-
-      /* Main Content */
-      .container {
-        max-width: 900px;
-        margin: 0 auto;
-        padding: 40px 20px;
-      }
-
-      /* Section */
-      .section {
-        margin-bottom: 50px;
-      }
-
-      .section-header {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        margin-bottom: 25px;
-      }
-
-      .section-number {
-        width: 45px;
-        height: 45px;
-        background: linear-gradient(
-          135deg,
-          var(--primary) 0%,
-          var(--accent-purple) 100%
-        );
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 700;
-        font-size: 1.2rem;
-        flex-shrink: 0;
-      }
-
-      .section h2 {
-        font-size: 1.5rem;
-        font-weight: 600;
-      }
-
-      /* Cards */
-      .card {
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        border-radius: 16px;
-        padding: 25px;
-        margin-bottom: 20px;
-        transition:
-          transform 0.2s,
-          box-shadow 0.2s;
-      }
-
-      .card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-      }
-
-      .card h3 {
-        font-size: 1.1rem;
-        font-weight: 600;
-        margin-bottom: 15px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-
-      .card h3 .icon {
-        font-size: 1.3rem;
-      }
-
-      /* Code Block */
-      .code-block {
-        background: var(--bg-code);
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        overflow: hidden;
-        margin: 15px 0;
-      }
-
-      .code-header {
-        background: rgba(255, 255, 255, 0.05);
-        padding: 10px 15px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: 1px solid var(--border);
-      }
-
-      .code-header span {
-        font-size: 0.8rem;
-        color: var(--text-secondary);
-        font-weight: 500;
-      }
-
-      .copy-btn {
-        background: var(--primary);
-        color: white;
-        border: none;
-        padding: 6px 12px;
-        border-radius: 6px;
-        font-size: 0.75rem;
-        cursor: pointer;
-        transition: background 0.2s;
-      }
-
-      .copy-btn:hover {
-        background: var(--primary-dark);
-      }
-
-      .copy-btn.copied {
-        background: var(--secondary);
-      }
-
-      pre {
-        padding: 20px;
-        overflow-x: auto;
-        font-family: "JetBrains Mono", "Fira Code", monospace;
-        font-size: 0.85rem;
-        line-height: 1.6;
-      }
-
-      code {
-        color: #e2e8f0;
-      }
-
-      .code-comment {
-        color: #6b7280;
-      }
-      .code-keyword {
-        color: #f472b6;
-      }
-      .code-string {
-        color: #a5f3c4;
-      }
-      .code-var {
-        color: #93c5fd;
-      }
-
-      /* Info Box */
-      .info-box {
-        background: linear-gradient(
-          135deg,
-          rgba(99, 102, 241, 0.1) 0%,
-          rgba(168, 85, 247, 0.1) 100%
-        );
-        border: 1px solid rgba(99, 102, 241, 0.3);
-        border-radius: 12px;
-        padding: 20px;
-        margin: 20px 0;
-      }
-
-      .info-box.warning {
-        background: linear-gradient(
-          135deg,
-          rgba(249, 115, 22, 0.1) 0%,
-          rgba(239, 68, 68, 0.1) 100%
-        );
-        border-color: rgba(249, 115, 22, 0.3);
-      }
-
-      .info-box.success {
-        background: linear-gradient(
-          135deg,
-          rgba(16, 185, 129, 0.1) 0%,
-          rgba(34, 197, 94, 0.1) 100%
-        );
-        border-color: rgba(16, 185, 129, 0.3);
-      }
-
-      .info-box h4 {
-        font-size: 0.9rem;
-        font-weight: 600;
-        margin-bottom: 8px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-
-      .info-box p {
-        font-size: 0.9rem;
-        color: var(--text-secondary);
-      }
-
-      /* Table */
-      .table-container {
-        overflow-x: auto;
-        border-radius: 12px;
-        border: 1px solid var(--border);
-      }
-
-      table {
-        width: 100%;
-        border-collapse: collapse;
-      }
-
-      th,
-      td {
-        padding: 15px 20px;
-        text-align: left;
-        border-bottom: 1px solid var(--border);
-      }
-
-      th {
-        background: rgba(99, 102, 241, 0.2);
-        font-weight: 600;
-        font-size: 0.85rem;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-      }
-
-      td {
-        font-size: 0.9rem;
-      }
-
-      tr:last-child td {
-        border-bottom: none;
-      }
-
-      tr:hover td {
-        background: rgba(255, 255, 255, 0.02);
-      }
-
-      /* Progress Steps */
-      .progress-container {
-        display: flex;
-        justify-content: space-between;
-        margin: 40px 0;
-        position: relative;
-      }
-
-      .progress-container::before {
-        content: "";
-        position: absolute;
-        top: 25px;
-        left: 50px;
-        right: 50px;
-        height: 3px;
-        background: var(--border);
-        z-index: 0;
-      }
-
-      .progress-step {
-        text-align: center;
-        position: relative;
-        z-index: 1;
-      }
-
-      .progress-step .step-icon {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        background: var(--bg-card);
-        border: 3px solid var(--primary);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 10px;
-        font-size: 1.2rem;
-      }
-
-      .progress-step span {
-        font-size: 0.8rem;
-        color: var(--text-secondary);
-      }
-
-      /* Footer */
-      .footer {
-        background: var(--bg-card);
-        border-top: 1px solid var(--border);
-        padding: 30px 20px;
-        text-align: center;
-        margin-top: 60px;
-      }
-
-      .footer p {
-        color: var(--text-secondary);
-        font-size: 0.9rem;
-      }
-
-      /* Responsive */
-      @media (max-width: 768px) {
-        .header h1 {
-          font-size: 1.8rem;
-        }
-
-        .progress-container {
-          flex-direction: column;
-          gap: 20px;
-        }
-
-        .progress-container::before {
-          display: none;
-        }
-
-        .nav-container {
-          gap: 10px;
-        }
-
-        .nav a {
-          padding: 6px 12px;
-          font-size: 0.8rem;
-        }
-      }
-    </style>
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <header class="header">
-      <h1>🚀 Taaruf Deployment Guide</h1>
-      <p>Panduan lengkap deploy API Laravel 12 & Web React ke Server</p>
-      <span class="badge">📍 Server: 192.168.13.76</span>
-    </header>
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <span class="logo-icon">🚀</span>
+          <span class="logo-text">Deployment Guide</span>
+        </div>
+      </div>
 
-    <nav class="nav">
-      <div class="nav-container">
-        <a href="#server-setup">🖥️ Server Setup</a>
-        <a href="#database">🗄️ Database</a>
-        <a href="#api-deploy">⚙️ API Deploy</a>
-        <a href="#web-deploy">🌐 Web Deploy</a>
-        <a href="#nginx">📡 Nginx</a>
-        <a href="#verification">✅ Verification</a>
+      <div class="nav-section">
+        <span class="nav-label">Overview</span>
+        <a href="#architecture" class="nav-item">Arsitektur Sistem</a>
+      </div>
+
+      <div class="nav-section">
+        <span class="nav-label">SSL & Domain</span>
+        <a href="#ssl" class="nav-item">SSL Subdomain Rules</a>
+        <a href="#cloudflared" class="nav-item">Update Cloudflared</a>
+      </div>
+
+      <div class="nav-section">
+        <span class="nav-label">Authentication</span>
+        <a href="#oauth-flow" class="nav-item">Google OAuth Flow</a>
+        <a href="#oauth-setup" class="nav-item">Setup Google Console</a>
+        <a href="#oauth-laravel" class="nav-item">Laravel Config</a>
+      </div>
+
+      <div class="nav-section">
+        <span class="nav-label">Deployment</span>
+        <a href="#deploy-steps" class="nav-item">Deployment Steps</a>
+        <a href="#checklist" class="nav-item">Checklist</a>
+      </div>
+
+      <div class="nav-section">
+        <span class="nav-label">Help</span>
+        <a href="#troubleshooting" class="nav-item">Troubleshooting</a>
+        <a href="#urls" class="nav-item">URLs Aplikasi</a>
       </div>
     </nav>
 
-    <main class="container">
-      <!-- Progress Overview -->
-      <div class="progress-container">
-        <div class="progress-step">
-          <div class="step-icon">1</div>
-          <span>Server</span>
-        </div>
-        <div class="progress-step">
-          <div class="step-icon">2</div>
-          <span>Database</span>
-        </div>
-        <div class="progress-step">
-          <div class="step-icon">3</div>
-          <span>API</span>
-        </div>
-        <div class="progress-step">
-          <div class="step-icon">4</div>
-          <span>Web</span>
-        </div>
-        <div class="progress-step">
-          <div class="step-icon">5</div>
-          <span>Nginx</span>
-        </div>
-        <div class="progress-step">
-          <div class="step-icon">✓</div>
-          <span>Done</span>
-        </div>
-      </div>
-
-      <!-- Section 1: Server Setup -->
-      <section id="server-setup" class="section">
-        <div class="section-header">
-          <div class="section-number">1</div>
-          <h2>Server Setup</h2>
-        </div>
-
-        <div class="card">
-          <h3><span class="icon">📦</span> Install Dependencies</h3>
-          <p style="color: var(--text-secondary); margin-bottom: 15px">
-            Install semua package yang dibutuhkan untuk menjalankan Laravel dan
-            React.
-          </p>
-
-          <div class="code-block">
-            <div class="code-header">
-              <span>bash</span>
-              <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
-            </div>
-            <pre><code><span class="code-comment"># Update system</span>
-apt update && apt upgrade -y
-
-<span class="code-comment"># Install PHP 8.2 + extensions</span>
-apt install -y software-properties-common
-add-apt-repository ppa:ondrej/php -y
-apt update
-apt install -y php8.2 php8.2-fpm php8.2-cli php8.2-pgsql php8.2-mbstring \
-    php8.2-xml php8.2-curl php8.2-zip php8.2-bcmath php8.2-intl
-
-<span class="code-comment"># Install PostgreSQL</span>
-apt install -y postgresql postgresql-contrib
-
-<span class="code-comment"># Install Nginx</span>
-apt install -y nginx
-
-<span class="code-comment"># Install Node.js 20</span>
-curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
-apt install -y nodejs
-
-<span class="code-comment"># Install Composer</span>
-curl -sS https://getcomposer.org/installer | php
-mv composer.phar /usr/local/bin/composer
-
-<span class="code-comment"># Install Git</span>
-apt install -y git</code></pre>
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Hero Section -->
+      <section class="hero">
+        <span class="hero-badge">📚 Documentation</span>
+        <h1>
+          Taaruf App<br /><span class="gradient-text">Deployment Guide</span>
+        </h1>
+        <p class="hero-subtitle">
+          Panduan lengkap deployment dan troubleshooting aplikasi Taaruf
+        </p>
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="stat-value">4</span>
+            <span class="stat-label">Deployment Steps</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">4</span>
+            <span class="stat-label">Troubleshooting</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">2</span>
+            <span class="stat-label">Servers</span>
           </div>
         </div>
       </section>
 
-      <!-- Section 2: Database -->
-      <section id="database" class="section">
+      <!-- Architecture Section -->
+      <section id="architecture" class="section">
         <div class="section-header">
-          <div class="section-number">2</div>
-          <h2>Database Setup</h2>
+          <span class="section-icon">🌐</span>
+          <h2>Arsitektur Sistem</h2>
         </div>
 
-        <div class="card">
-          <h3><span class="icon">🗄️</span> Buat Database PostgreSQL</h3>
-
-          <div class="code-block">
-            <div class="code-header">
-              <span>PostgreSQL</span>
-              <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
-            </div>
-            <pre><code><span class="code-comment"># Masuk PostgreSQL</span>
-sudo -u postgres psql
-
-<span class="code-comment"># Buat database dan user</span>
-<span class="code-keyword">CREATE DATABASE</span> taaruf_db;
-<span class="code-keyword">CREATE USER</span> taaruf_user <span class="code-keyword">WITH ENCRYPTED PASSWORD</span> <span class="code-string">'TaarufSecure2025!'</span>;
-<span class="code-keyword">GRANT ALL PRIVILEGES ON DATABASE</span> taaruf_db <span class="code-keyword">TO</span> taaruf_user;
-<span class="code-keyword">ALTER DATABASE</span> taaruf_db <span class="code-keyword">OWNER TO</span> taaruf_user;
-\q</code></pre>
+        <div class="architecture-diagram">
+          <div class="arch-node">
+            <div class="arch-icon">👤</div>
+            <div class="arch-label">User Browser</div>
+            <div class="arch-sublabel">HTTPS Request</div>
           </div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-node cloudflare">
+            <div class="arch-icon">☁️</div>
+            <div class="arch-label">Cloudflare</div>
+            <div class="arch-sublabel">SSL Termination</div>
+          </div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-node">
+            <div class="arch-icon">🔒</div>
+            <div class="arch-label">Cloudflared</div>
+            <div class="arch-sublabel">Tunnel</div>
+          </div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-node">
+            <div class="arch-icon">🖥️</div>
+            <div class="arch-label">Ubuntu Server</div>
+            <div class="arch-sublabel">192.168.13.76</div>
+          </div>
+        </div>
 
-          <div class="info-box warning">
-            <h4>⚠️ Penting</h4>
-            <p>
-              Ganti password <code>'TaarufSecure2025!'</code> dengan password
-              yang lebih aman untuk production!
+        <div class="arch-features">
+          <span class="arch-feature"
+            ><span class="check">✓</span> taaruf.donarazhar.site (Web
+            React)</span
+          >
+          <span class="arch-feature"
+            ><span class="check">✓</span> taaruf-api.donarazhar.site (Laravel
+            API)</span
+          >
+        </div>
+      </section>
+
+      <!-- SSL Section -->
+      <section id="ssl" class="section">
+        <div class="step-header">
+          <div class="step-number">⚠️</div>
+          <div>
+            <h2>SSL Subdomain Naming Rules</h2>
+            <p class="step-desc">
+              Cloudflare Universal SSL hanya cover 1 level subdomain
             </p>
           </div>
         </div>
-      </section>
 
-      <!-- Section 3: API Deploy -->
-      <section id="api-deploy" class="section">
-        <div class="section-header">
-          <div class="section-number">3</div>
-          <h2>API Deployment</h2>
+        <div class="warning-card">
+          <span class="warning-icon">⚠️</span>
+          <div class="warning-content">
+            <strong>Penting:</strong> Cloudflare Universal SSL (gratis) hanya
+            mencakup <code>*.domain.com</code> (1 level), TIDAK mencakup
+            <code>*.subdomain.domain.com</code> (2 level)
+          </div>
         </div>
 
-        <div class="card">
-          <h3><span class="icon">📂</span> Clone & Setup Repository</h3>
+        <div class="prereq-grid" style="margin-top: 1.5rem">
+          <div class="prereq-card" style="border-color: #ef4444">
+            <div class="prereq-icon">❌</div>
+            <h3>Salah (2 Level)</h3>
+            <p><code>api.taaruf.donarazhar.site</code></p>
+          </div>
+          <div class="prereq-card" style="border-color: #22c55e">
+            <div class="prereq-icon">✅</div>
+            <h3>Benar (1 Level)</h3>
+            <p><code>taaruf-api.donarazhar.site</code></p>
+          </div>
+        </div>
+      </section>
 
-          <div class="code-block">
-            <div class="code-header">
-              <span>bash</span>
-              <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
-            </div>
-            <pre><code><span class="code-comment"># Buat direktori</span>
-mkdir -p /var/www/taaruf
-cd /var/www/taaruf
+      <!-- Cloudflared Update Section -->
+      <section id="cloudflared" class="section">
+        <div class="step-header">
+          <div class="step-number">1</div>
+          <div>
+            <h2>Update Cloudflared Config</h2>
+            <p class="step-desc">Ubah subdomain dari 2 level ke 1 level</p>
+          </div>
+        </div>
 
-<span class="code-comment"># Clone repository</span>
-git clone https://github.com/donarazhar/taaruf-appVersi-mobile.git .
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">bash</span>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <pre><code># Edit config
+nano /etc/cloudflared/config.yml
 
-<span class="code-comment"># Install dependencies</span>
+# Ganti hostname
+# SEBELUM: api.taaruf.donarazhar.site
+# SESUDAH: taaruf-api.donarazhar.site
+
+# Tambah DNS route baru
+cloudflared tunnel route dns taaruf taaruf-api.donarazhar.site
+
+# Restart service
+systemctl restart cloudflared</code></pre>
+        </div>
+
+        <div class="info-card">
+          <span class="info-icon">ℹ️</span>
+          <div class="info-content">
+            Jangan lupa hapus DNS record lama di Cloudflare Dashboard
+          </div>
+        </div>
+      </section>
+
+      <!-- OAuth Flow Section -->
+      <section id="oauth-flow" class="section">
+        <div class="step-header">
+          <div class="step-number">2</div>
+          <div>
+            <h2>Google OAuth Flow</h2>
+            <p class="step-desc">
+              Alur autentikasi Google OAuth dengan redirect ke frontend
+            </p>
+          </div>
+        </div>
+
+        <div class="steps-list">
+          <div class="step-item">
+            <span class="step-bullet">1</span>
+            <span>User klik "Login with Google" di frontend</span>
+          </div>
+          <div class="step-item">
+            <span class="step-bullet">2</span>
+            <span>Frontend hit API: <code>GET /api/auth/google</code></span>
+          </div>
+          <div class="step-item">
+            <span class="step-bullet">3</span>
+            <span>API return Google OAuth URL</span>
+          </div>
+          <div class="step-item">
+            <span class="step-bullet">4</span>
+            <span>User redirect ke Google, login, consent</span>
+          </div>
+          <div class="step-item">
+            <span class="step-bullet">5</span>
+            <span
+              >Google redirect ke:
+              <code
+                >taaruf-api.donarazhar.site/api/auth/google/callback</code
+              ></span
+            >
+          </div>
+          <div class="step-item">
+            <span class="step-bullet">6</span>
+            <span
+              >API <strong>REDIRECT</strong> ke:
+              <code
+                >taaruf.donarazhar.site/auth/google/callback?token=...</code
+              ></span
+            >
+          </div>
+          <div class="step-item">
+            <span class="step-bullet">7</span>
+            <span
+              >Frontend baca token dari URL, simpan ke localStorage, redirect ke
+              Dashboard</span
+            >
+          </div>
+        </div>
+
+        <div class="warning-card" style="margin-top: 1.5rem">
+          <span class="warning-icon">⚠️</span>
+          <div class="warning-content">
+            <strong>PENTING:</strong> API HARUS redirect ke frontend dengan
+            token, BUKAN return JSON langsung!
+          </div>
+        </div>
+      </section>
+
+      <!-- OAuth Setup Section -->
+      <section id="oauth-setup" class="section">
+        <div class="step-header">
+          <div class="step-number">3</div>
+          <div>
+            <h2>Setup Google Cloud Console</h2>
+            <p class="step-desc">
+              Konfigurasi OAuth credentials di Google Cloud
+            </p>
+          </div>
+        </div>
+
+        <div class="steps-list">
+          <div class="step-item">
+            <span class="step-bullet">1</span>
+            <span
+              >Buka
+              <a href="https://console.cloud.google.com" target="_blank"
+                >console.cloud.google.com</a
+              ></span
+            >
+          </div>
+          <div class="step-item">
+            <span class="step-bullet">2</span>
+            <span
+              >APIs & Services → Credentials → Create Credentials → OAuth client
+              ID</span
+            >
+          </div>
+          <div class="step-item">
+            <span class="step-bullet">3</span>
+            <span>Application type: <strong>Web application</strong></span>
+          </div>
+        </div>
+
+        <h4 style="margin-top: 1.5rem; color: var(--text-secondary)">
+          Authorized JavaScript origins:
+        </h4>
+        <div class="code-block small">
+          <pre><code>https://taaruf.donarazhar.site</code></pre>
+        </div>
+
+        <h4 style="margin-top: 1rem; color: var(--text-secondary)">
+          Authorized redirect URIs:
+        </h4>
+        <div class="code-block small">
+          <pre><code>https://taaruf-api.donarazhar.site/api/auth/google/callback</code></pre>
+        </div>
+      </section>
+
+      <!-- Laravel Config Section -->
+      <section id="oauth-laravel" class="section">
+        <div class="step-header">
+          <div class="step-number">4</div>
+          <div>
+            <h2>Laravel .env Configuration</h2>
+            <p class="step-desc">Konfigurasi Google OAuth di Laravel backend</p>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">env</span>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <pre><code>GOOGLE_CLIENT_ID=xxxxxxxxxxxxx.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=xxxxxxxxxxxxxxxx
+GOOGLE_REDIRECT_URI=https://taaruf-api.donarazhar.site/api/auth/google/callback</code></pre>
+        </div>
+
+        <div class="code-block" style="margin-top: 1rem">
+          <div class="code-header">
+            <span class="code-lang">bash</span>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <pre><code># Clear cache setelah update .env
 cd /var/www/taaruf/api
+php artisan config:clear
+php artisan cache:clear</code></pre>
+        </div>
+      </section>
+
+      <!-- Deployment Steps Section -->
+      <section id="deploy-steps" class="section">
+        <div class="step-header">
+          <div class="step-number">5</div>
+          <div>
+            <h2>Deployment Steps</h2>
+            <p class="step-desc">Langkah-langkah deploy ke server</p>
+          </div>
+        </div>
+
+        <h4 style="margin-bottom: 0.75rem; color: var(--accent-primary)">
+          1. Pull Latest Code
+        </h4>
+        <div class="code-block small">
+          <pre><code>cd /var/www/taaruf
+git pull origin main</code></pre>
+        </div>
+
+        <h4 style="margin: 1.25rem 0 0.75rem; color: var(--accent-primary)">
+          2. Deploy Web Frontend
+        </h4>
+        <div class="code-block small">
+          <pre><code>rm -rf web-dist/*
+unzip -o web/dist.zip -d web-dist
+grep "taaruf-api" web-dist/assets/*.js | head -1</code></pre>
+        </div>
+
+        <h4 style="margin: 1.25rem 0 0.75rem; color: var(--accent-primary)">
+          3. Deploy API Backend
+        </h4>
+        <div class="code-block small">
+          <pre><code>cd api
 composer install --no-dev --optimize-autoloader
-
-<span class="code-comment"># Setup environment</span>
-cp .env.example .env
-php artisan key:generate</code></pre>
-          </div>
+php artisan config:clear
+php artisan cache:clear
+php artisan route:clear</code></pre>
         </div>
 
-        <div class="card">
-          <h3><span class="icon">⚙️</span> Konfigurasi .env</h3>
-          <p style="color: var(--text-secondary); margin-bottom: 15px">
-            Edit file <code>/var/www/taaruf/api/.env</code> dengan konfigurasi
-            berikut:
-          </p>
-
-          <div class="code-block">
-            <div class="code-header">
-              <span>.env</span>
-              <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
-            </div>
-            <pre><code><span class="code-var">APP_NAME</span>=<span class="code-string">"Taaruf Al Azhar"</span>
-<span class="code-var">APP_ENV</span>=production
-<span class="code-var">APP_DEBUG</span>=false
-<span class="code-var">APP_URL</span>=http://192.168.13.76
-
-<span class="code-var">DB_CONNECTION</span>=pgsql
-<span class="code-var">DB_HOST</span>=127.0.0.1
-<span class="code-var">DB_PORT</span>=5432
-<span class="code-var">DB_DATABASE</span>=taaruf_db
-<span class="code-var">DB_USERNAME</span>=taaruf_user
-<span class="code-var">DB_PASSWORD</span>=TaarufSecure2025!</code></pre>
-          </div>
-        </div>
-
-        <div class="card">
-          <h3><span class="icon">🔧</span> Finalize Setup</h3>
-
-          <div class="code-block">
-            <div class="code-header">
-              <span>bash</span>
-              <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
-            </div>
-            <pre><code><span class="code-comment"># Run migrations</span>
-php artisan migrate --force
-
-<span class="code-comment"># Set permissions</span>
-chown -R www-data:www-data /var/www/taaruf
+        <h4 style="margin: 1.25rem 0 0.75rem; color: var(--accent-primary)">
+          4. Set Permissions
+        </h4>
+        <div class="code-block small">
+          <pre><code>chown -R www-data:www-data /var/www/taaruf
 chmod -R 755 /var/www/taaruf
-chmod -R 775 /var/www/taaruf/api/storage
-chmod -R 775 /var/www/taaruf/api/bootstrap/cache</code></pre>
+chmod -R 775 /var/www/taaruf/api/storage</code></pre>
+        </div>
+
+        <h4 style="margin: 1.25rem 0 0.75rem; color: var(--accent-primary)">
+          5. Restart Services
+        </h4>
+        <div class="code-block small">
+          <pre><code>systemctl restart php8.2-fpm nginx cloudflared</code></pre>
+        </div>
+      </section>
+
+      <!-- Checklist Section -->
+      <section id="checklist" class="section">
+        <div class="section-header">
+          <span class="section-icon">📋</span>
+          <h2>Deployment Checklist</h2>
+        </div>
+
+        <div class="steps-list">
+          <div class="step-item">
+            <span class="step-bullet">☐</span> Git pull latest code
+          </div>
+          <div class="step-item">
+            <span class="step-bullet">☐</span> Extract web dist.zip ke web-dist/
+          </div>
+          <div class="step-item">
+            <span class="step-bullet">☐</span> Composer install di folder api/
+          </div>
+          <div class="step-item">
+            <span class="step-bullet">☐</span> Clear Laravel cache
+          </div>
+          <div class="step-item">
+            <span class="step-bullet">☐</span> Set file permissions
+          </div>
+          <div class="step-item">
+            <span class="step-bullet">☐</span> Restart PHP-FPM, Nginx,
+            Cloudflared
+          </div>
+          <div class="step-item">
+            <span class="step-bullet">☐</span> Test login email/password
+          </div>
+          <div class="step-item">
+            <span class="step-bullet">☐</span> Test login Google OAuth
           </div>
         </div>
       </section>
 
-      <!-- Section 4: Web Deploy -->
-      <section id="web-deploy" class="section">
+      <!-- Troubleshooting Section -->
+      <section id="troubleshooting" class="section">
         <div class="section-header">
-          <div class="section-number">4</div>
-          <h2>Web Deployment</h2>
+          <span class="section-icon">🔧</span>
+          <h2>Troubleshooting</h2>
         </div>
 
-        <div class="card">
-          <h3>
-            <span class="icon">💻</span> Build di Komputer Lokal (Windows)
-          </h3>
-
-          <div class="code-block">
-            <div class="code-header">
-              <span>PowerShell</span>
-              <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
-            </div>
-            <pre><code><span class="code-comment"># Masuk folder web</span>
-cd "d:\9. 0 to ~ ITTD\2. All Source Code\taaruf\web"
-
-<span class="code-comment"># Install dependencies & build</span>
-npm install
-npm run build
-
-<span class="code-comment"># Upload ke server</span>
-scp -r dist/* root@192.168.13.76:/var/www/taaruf/web/</code></pre>
-          </div>
-
-          <div class="info-box success">
-            <h4>💡 Tips</h4>
-            <p>
-              Pastikan folder <code>/var/www/taaruf/web</code> sudah dibuat di
-              server sebelum upload.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Section 5: Nginx -->
-      <section id="nginx" class="section">
-        <div class="section-header">
-          <div class="section-number">5</div>
-          <h2>Nginx Configuration</h2>
-        </div>
-
-        <div class="card">
-          <h3><span class="icon">📡</span> Buat Konfigurasi Nginx</h3>
-          <p style="color: var(--text-secondary); margin-bottom: 15px">
-            Buat file <code>/etc/nginx/sites-available/taaruf</code>:
-          </p>
-
-          <div class="code-block">
-            <div class="code-header">
-              <span>nginx</span>
-              <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
-            </div>
-            <pre><code><span class="code-comment"># API Backend</span>
-server {
-    listen 8000;
-    server_name 192.168.13.76;
-    root /var/www/taaruf/api/public;
-
-    index index.php;
-
-    location / {
-        try_files $uri $uri/ /index.php?$query_string;
-    }
-
-    location ~ \.php$ {
-        fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;
-        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
-        include fastcgi_params;
-    }
-
-    location ~ /\.(?!well-known).* {
-        deny all;
-    }
-}
-
-<span class="code-comment"># Web Frontend</span>
-server {
-    listen 80;
-    server_name 192.168.13.76;
-    root /var/www/taaruf/web;
-
-    index index.html;
-
-    location / {
-        try_files $uri $uri/ /index.html;
-    }
-
-    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2)$ {
-        expires 1y;
-        add_header Cache-Control "public, immutable";
-    }
-}</code></pre>
-          </div>
-        </div>
-
-        <div class="card">
-          <h3><span class="icon">🚀</span> Aktifkan & Restart</h3>
-
-          <div class="code-block">
-            <div class="code-header">
-              <span>bash</span>
-              <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
-            </div>
-            <pre><code><span class="code-comment"># Enable site</span>
-ln -s /etc/nginx/sites-available/taaruf /etc/nginx/sites-enabled/
-
-<span class="code-comment"># Test config</span>
-nginx -t
-
-<span class="code-comment"># Restart services</span>
-systemctl restart nginx
-systemctl restart php8.2-fpm</code></pre>
-          </div>
-        </div>
-      </section>
-
-      <!-- Section 6: Verification -->
-      <section id="verification" class="section">
-        <div class="section-header">
-          <div class="section-number">✓</div>
-          <h2>Verification</h2>
-        </div>
-
-        <div class="card">
-          <h3><span class="icon">🧪</span> Test Endpoints</h3>
-
-          <div class="code-block">
-            <div class="code-header">
-              <span>bash</span>
-              <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
-            </div>
-            <pre><code><span class="code-comment"># Test API</span>
-curl http://192.168.13.76:8000/api/health
-
-<span class="code-comment"># Test Web (buka di browser)</span>
-# http://192.168.13.76</code></pre>
-          </div>
-        </div>
-
-        <div class="card">
-          <h3><span class="icon">🌐</span> Access URLs</h3>
-
-          <div class="table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th>Service</th>
-                  <th>URL</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>🌐 Web Frontend</td>
-                  <td>
-                    <a
-                      href="http://192.168.13.76"
-                      style="color: var(--accent-blue)"
-                      >http://192.168.13.76</a
-                    >
-                  </td>
-                  <td>
-                    <span style="color: var(--accent-green)">●</span> Ready
-                  </td>
-                </tr>
-                <tr>
-                  <td>⚙️ API Backend</td>
-                  <td>
-                    <a
-                      href="http://192.168.13.76:8000/api"
-                      style="color: var(--accent-blue)"
-                      >http://192.168.13.76:8000/api</a
-                    >
-                  </td>
-                  <td>
-                    <span style="color: var(--accent-green)">●</span> Ready
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="info-box success">
-          <h4>🎉 Selamat!</h4>
+        <div class="trouble-card">
+          <h3>❌ SSL Error: ERR_SSL_VERSION_OR_CIPHER_MISMATCH</h3>
           <p>
-            Jika semua langkah di atas berhasil, aplikasi Taaruf sudah berhasil
-            di-deploy!
+            <strong>Penyebab:</strong> Subdomain 2 level tidak di-cover
+            Universal SSL
+          </p>
+          <p>
+            <strong>Solusi:</strong> Rename subdomain ke 1 level (contoh:
+            <code>taaruf-api</code> bukan <code>api.taaruf</code>)
+          </p>
+        </div>
+
+        <div class="trouble-card">
+          <h3>❌ API Return 500 Error</h3>
+          <p><strong>Penyebab:</strong> Route [login] not defined</p>
+          <p>
+            <strong>Solusi:</strong> Tambah exception handler untuk
+            AuthenticationException di <code>bootstrap/app.php</code>
+          </p>
+        </div>
+
+        <div class="trouble-card">
+          <h3>❌ Google Login Showing JSON Instead of Dashboard</h3>
+          <p><strong>Penyebab:</strong> API return JSON langsung ke browser</p>
+          <p>
+            <strong>Solusi:</strong> Ubah API agar redirect ke frontend dengan
+            token di URL params
+          </p>
+        </div>
+
+        <div class="trouble-card">
+          <h3>❌ Web Still Using localhost:8000</h3>
+          <p><strong>Penyebab:</strong> Server belum deploy dist.zip baru</p>
+          <p>
+            <strong>Solusi:</strong>
+            <code>rm -rf web-dist/* && unzip -o web/dist.zip -d web-dist</code>
           </p>
         </div>
       </section>
+
+      <!-- URLs Section -->
+      <section id="urls" class="section">
+        <div class="section-header">
+          <span class="section-icon">📞</span>
+          <h2>URLs Aplikasi</h2>
+        </div>
+
+        <div class="table-container">
+          <table class="command-table">
+            <thead>
+              <tr>
+                <th>Service</th>
+                <th>URL</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Web Frontend</td>
+                <td>
+                  <a href="https://taaruf.donarazhar.site" target="_blank"
+                    >https://taaruf.donarazhar.site</a
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td>API Backend</td>
+                <td>
+                  <a href="https://taaruf-api.donarazhar.site" target="_blank"
+                    >https://taaruf-api.donarazhar.site</a
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td>API Health Check</td>
+                <td>
+                  <a
+                    href="https://taaruf-api.donarazhar.site/api/user"
+                    target="_blank"
+                    >https://taaruf-api.donarazhar.site/api/user</a
+                  >
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <p>Dokumentasi dibuat pada 7 Februari 2026</p>
+        <div class="footer-links">
+          <a href="index.html">Cloudflare Tunnel Guide</a>
+          <span>•</span>
+          <a href="deployment-guide.html">Deployment Guide</a>
+        </div>
+      </footer>
     </main>
 
-    <footer class="footer">
-      <p>📖 Taaruf Deployment Guide | YPI Al Azhar | 2025</p>
-    </footer>
-
     <script>
-      function copyCode(button) {
-        const codeBlock = button.closest(".code-block");
-        const code = codeBlock.querySelector("code").innerText;
-
+      function copyCode(btn) {
+        const code = btn
+          .closest(".code-block")
+          .querySelector("code").textContent;
         navigator.clipboard.writeText(code).then(() => {
-          button.textContent = "✓ Copied!";
-          button.classList.add("copied");
-
-          setTimeout(() => {
-            button.textContent = "📋 Copy";
-            button.classList.remove("copied");
-          }, 2000);
+          const originalText = btn.textContent;
+          btn.textContent = "✅ Copied!";
+          setTimeout(() => (btn.textContent = originalText), 2000);
         });
       }
 
-      // Smooth scroll for navigation
-      document.querySelectorAll(".nav a").forEach((anchor) => {
-        anchor.addEventListener("click", function (e) {
-          e.preventDefault();
-          const target = document.querySelector(this.getAttribute("href"));
-          target.scrollIntoView({ behavior: "smooth", block: "start" });
+      // Scroll spy for navigation
+      const sections = document.querySelectorAll("section[id]");
+      const navItems = document.querySelectorAll(".nav-item");
+
+      window.addEventListener("scroll", () => {
+        let current = "";
+        sections.forEach((section) => {
+          const sectionTop = section.offsetTop - 100;
+          if (scrollY >= sectionTop) {
+            current = section.getAttribute("id");
+          }
+        });
+
+        navItems.forEach((item) => {
+          item.classList.remove("active");
+          if (item.getAttribute("href") === `#${current}`) {
+            item.classList.add("active");
+          }
         });
       });
     </script>
