@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { API_URL } from '../config/api';
 
 function GoogleCallback() {
   const [searchParams] = useSearchParams();
@@ -23,7 +24,7 @@ function GoogleCallback() {
     // Kirim code ke backend
     const handleCallback = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/auth/google/callback?code=${code}`, {
+        const response = await fetch(`${API_URL}/auth/google/callback?code=${code}`, {
           method: 'GET',
           headers: {
             'Accept': 'application/json'

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { API_URL } from '../config/api';
 import './Admin.css';
 
 function AdminSettings() {
@@ -27,7 +28,7 @@ function AdminSettings() {
     const fetchActivityLogs = async () => {
         setLoadingLogs(true);
         try {
-            const response = await fetch('http://localhost:8000/api/admin/activity-logs', {
+            const response = await fetch(`${API_URL}/admin/activity-logs`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const data = await response.json();
@@ -42,7 +43,7 @@ function AdminSettings() {
     const fetchBackups = async () => {
         setLoadingBackups(true);
         try {
-            const response = await fetch('http://localhost:8000/api/admin/backups', {
+            const response = await fetch(`${API_URL}/admin/backups`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const data = await response.json();
@@ -58,7 +59,7 @@ function AdminSettings() {
         setBackupInProgress(true);
         setMessage(null);
         try {
-            const response = await fetch('http://localhost:8000/api/admin/backups/create', {
+            const response = await fetch(`${API_URL}/admin/backups/create`, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -76,7 +77,7 @@ function AdminSettings() {
         if (!confirm('Yakin ingin menghapus backup ini?')) return;
 
         try {
-            await fetch(`http://localhost:8000/api/admin/backups/${filename}`, {
+            await fetch(`${API_URL}/admin/backups/${filename}`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -91,7 +92,7 @@ function AdminSettings() {
         if (!confirm('Yakin ingin menghapus semua activity logs?')) return;
 
         try {
-            await fetch('http://localhost:8000/api/admin/activity-logs/clear', {
+            await fetch(`${API_URL}/admin/activity-logs/clear`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -254,7 +255,7 @@ function AdminSettings() {
                                     </div>
                                     <div className="backup-actions">
                                         <a
-                                            href={`http://localhost:8000/api/admin/backups/${backup.filename}/download`}
+                                            href={`${API_URL}/admin/backups/${backup.filename}/download`}
                                             className="btn-edit"
                                             target="_blank"
                                             rel="noopener noreferrer"

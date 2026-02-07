@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { API_URL } from '../config/api';
 import './Admin.css';
 
 function AdminUsers() {
@@ -24,7 +25,7 @@ function AdminUsers() {
     const fetchUsers = async () => {
         setLoading(true);
         try {
-            let url = 'http://localhost:8000/api/admin/karyawan';
+            let url = `${API_URL}/admin/karyawan`;
             const params = new URLSearchParams();
             if (filter !== 'all') params.append('status', filter);
             if (search) params.append('search', search);

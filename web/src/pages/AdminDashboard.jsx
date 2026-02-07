@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { API_URL } from '../config/api';
 import './Admin.css';
 
 function AdminDashboard() {
@@ -24,10 +25,10 @@ function AdminDashboard() {
     const fetchData = async () => {
         try {
             const [statsRes, pendingRes] = await Promise.all([
-                fetch('http://localhost:8000/api/admin/dashboard/stats', {
+                fetch(`${API_URL}/admin/dashboard/stats`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 }),
-                fetch('http://localhost:8000/api/admin/registrations/pending', {
+                fetch(`${API_URL}/admin/registrations/pending`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 })
             ]);
@@ -47,7 +48,7 @@ function AdminDashboard() {
     const handleApprove = async (id) => {
         setActionLoading(id);
         try {
-            await fetch(`http://localhost:8000/api/admin/registrations/${id}/approve`, {
+            await fetch(`${API_URL}/admin/registrations/${id}/approve`, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -62,7 +63,7 @@ function AdminDashboard() {
     const handleReject = async (id) => {
         setActionLoading(id);
         try {
-            await fetch(`http://localhost:8000/api/admin/registrations/${id}/reject`, {
+            await fetch(`${API_URL}/admin/registrations/${id}/reject`, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}` }
             });

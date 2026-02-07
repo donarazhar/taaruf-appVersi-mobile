@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { API_URL } from '../config/api';
 import './Admin.css';
 
 function AdminYoutube() {
@@ -27,7 +28,7 @@ function AdminYoutube() {
 
     const fetchVideos = async () => {
         try {
-            const response = await fetch('http://localhost:8000/api/admin/youtube', {
+            const response = await fetch(`${API_URL}/admin/youtube`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const data = await response.json();
@@ -43,8 +44,8 @@ function AdminYoutube() {
         e.preventDefault();
         try {
             const url = editData
-                ? `http://localhost:8000/api/admin/youtube/${editData.id}`
-                : 'http://localhost:8000/api/admin/youtube';
+                ? `${API_URL}/admin/youtube/${editData.id}`
+                : `${API_URL}/admin/youtube`;
 
             await fetch(url, {
                 method: editData ? 'PUT' : 'POST',
@@ -77,7 +78,7 @@ function AdminYoutube() {
         if (!confirm('Yakin ingin menghapus video ini?')) return;
 
         try {
-            await fetch(`http://localhost:8000/api/admin/youtube/${id}`, {
+            await fetch(`${API_URL}/admin/youtube/${id}`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }
             });

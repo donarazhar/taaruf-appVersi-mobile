@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { API_URL } from '../config/api';
 import './Auth.css';
 
 function LoginPage() {
@@ -22,7 +23,7 @@ function LoginPage() {
         setIsLoading(true);
 
         try {
-            const response = await fetch('http://localhost:8000/api/auth/login', {
+            const response = await fetch(`${API_URL}/auth/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -58,7 +59,7 @@ function LoginPage() {
 
     const handleGoogleLogin = async () => {
         try {
-            const response = await fetch('http://localhost:8000/api/auth/google');
+            const response = await fetch(`${API_URL}/auth/google`);
             const data = await response.json();
 
             if (data.url) {

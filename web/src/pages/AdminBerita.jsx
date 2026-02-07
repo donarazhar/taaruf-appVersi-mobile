@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { API_URL } from '../config/api';
 import './Admin.css';
 
 function AdminBerita() {
@@ -29,7 +30,7 @@ function AdminBerita() {
 
     const fetchBerita = async () => {
         try {
-            const response = await fetch('http://localhost:8000/api/admin/berita', {
+            const response = await fetch(`${API_URL}/admin/berita`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const data = await response.json();
@@ -45,8 +46,8 @@ function AdminBerita() {
         e.preventDefault();
         try {
             const url = editData
-                ? `http://localhost:8000/api/admin/berita/${editData.id}`
-                : 'http://localhost:8000/api/admin/berita';
+                ? `${API_URL}/admin/berita/${editData.id}`
+                : `${API_URL}/admin/berita`;
 
             const response = await fetch(url, {
                 method: editData ? 'PUT' : 'POST',
@@ -83,7 +84,7 @@ function AdminBerita() {
         if (!confirm('Yakin ingin menghapus berita ini?')) return;
 
         try {
-            await fetch(`http://localhost:8000/api/admin/berita/${id}`, {
+            await fetch(`${API_URL}/admin/berita/${id}`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }
             });

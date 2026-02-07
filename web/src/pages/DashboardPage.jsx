@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { API_URL } from '../config/api';
 import './Dashboard.css';
 
 function DashboardPage() {
@@ -27,7 +28,7 @@ function DashboardPage() {
 
     const fetchProfile = async () => {
         try {
-            const response = await fetch('http://localhost:8000/api/auth/profile', {
+            const response = await fetch(`${API_URL}/auth/profile`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const data = await response.json();
