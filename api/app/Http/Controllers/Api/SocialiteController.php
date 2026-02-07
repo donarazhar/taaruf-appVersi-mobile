@@ -14,6 +14,9 @@ use Laravel\Socialite\Facades\Socialite;
 
 class SocialiteController extends Controller
 {
+    // Frontend URL for redirect
+    private $frontendUrl = 'https://taaruf.donarazhar.site';
+
     /**
      * Redirect ke Google OAuth
      */
@@ -43,10 +46,7 @@ class SocialiteController extends Controller
             $code = $request->get('code');
 
             if (!$code) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Kode otorisasi tidak ditemukan'
-                ], 400);
+                return redirect($this->frontendUrl . '/login?error=Kode otorisasi tidak ditemukan');
             }
 
             /** @var \Laravel\Socialite\Two\GoogleProvider $driver */
@@ -62,18 +62,18 @@ class SocialiteController extends Controller
                 // Ini adalah Super Admin - login sebagai admin
                 $token = $adminUser->createToken('google-admin-token')->plainTextToken;
 
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Login berhasil sebagai Admin',
-                    'user' => [
-                        'id' => $adminUser->id,
-                        'name' => $adminUser->name,
-                        'email' => $adminUser->email
-                    ],
+                $userData = urlencode(json_encode([
+                    'id' => $adminUser->id,
+                    'name' => $adminUser->name,
+                    'email' => $adminUser->email
+                ]));
+
+                return redirect($this->frontendUrl . '/auth/google/callback?' . http_build_query([
                     'token' => $token,
-                    'is_admin' => true,
+                    'user' => $userData,
+                    'is_admin' => 'true',
                     'role' => 'super_admin'
-                ]);
+                ]));
             }
 
             // 2. CEK APAKAH KARYAWAN SUDAH ADA
@@ -82,30 +82,24 @@ class SocialiteController extends Controller
             if ($karyawan) {
                 // User karyawan sudah ada, cek status
                 if ($karyawan->status === 'pending') {
-                    return response()->json([
-                        'status' => 'pending',
-                        'message' => 'Akun Anda masih menunggu persetujuan admin.'
-                    ], 200);
+                    return redirect($this->frontendUrl . '/login?error=' . urlencode('Akun Anda masih menunggu persetujuan admin.'));
                 }
 
                 if ($karyawan->status === 'rejected') {
-                    return response()->json([
-                        'status' => 'rejected',
-                        'message' => 'Akun Anda ditolak oleh admin.'
-                    ], 200);
+                    return redirect($this->frontendUrl . '/login?error=' . urlencode('Akun Anda ditolak oleh admin.'));
                 }
 
                 // Login sukses sebagai karyawan
                 $token = $karyawan->createToken('google-token')->plainTextToken;
 
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Login berhasil',
-                    'user' => $karyawan->load('biodata'),
+                $userData = urlencode(json_encode($karyawan->load('biodata')));
+
+                return redirect($this->frontendUrl . '/auth/google/callback?' . http_build_query([
                     'token' => $token,
-                    'is_admin' => false,
+                    'user' => $userData,
+                    'is_admin' => 'false',
                     'role' => 'karyawan'
-                ]);
+                ]));
             }
 
             // 3. USER BARU - buat akun karyawan dengan status pending
@@ -134,20 +128,12 @@ class SocialiteController extends Controller
             // Buat biodata kosong
             Biodata::create(['email' => $karyawan->email]);
 
-            return response()->json([
-                'status' => 'pending',
-                'message' => 'Registrasi berhasil! Akun Anda menunggu persetujuan admin.',
-                'nip' => $nip,
-            ], 201);
-
+            return redirect($this->frontendUrl . '/login?message=' . urlencode('Registrasi berhasil! Akun Anda menunggu persetujuan admin.'));
         } catch (\Exception $e) {
             Log::error('Google callback error: ' . $e->getMessage());
             Log::error('Stack trace: ' . $e->getTraceAsString());
 
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Gagal login dengan Google: ' . $e->getMessage()
-            ], 500);
+            return redirect($this->frontendUrl . '/login?error=' . urlencode('Gagal login dengan Google: ' . $e->getMessage()));
         }
     }
 }
