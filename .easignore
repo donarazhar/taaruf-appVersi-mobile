@@ -1,0 +1,17 @@
+# EAS Build - Exclude non-mobile folders from build archive
+# This file must be at git root for monorepo structure
+
+# Exclude other project folders
+api/
+web/
+docs/
+
+# Exclude node_modules (EAS will install fresh)
+**/node_modules
+
+# Exclude git files
+.git/
+
+# Exclude unnecessary files
+*.zip
+*.log

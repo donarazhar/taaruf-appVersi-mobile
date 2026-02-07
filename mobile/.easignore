@@ -1,0 +1,20 @@
+# Exclude parent folders that shouldn't be in mobile build
+../api
+../web
+../docs
+../.git
+
+# Exclude local Android build files (use EAS build instead)
+android/.gradle
+android/app/build
+android/build
+
+# Exclude node_modules (EAS will install fresh)
+node_modules
+
+# Exclude local development files
+.expo
+*.log
+
+# Exclude large unnecessary files
+*.zip

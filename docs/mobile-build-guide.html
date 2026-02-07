@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Taaruf Mobile - Build Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <span class="logo-icon">📱</span>
+          <span class="logo-text">Mobile Build Guide</span>
+        </div>
+      </div>
+
+      <div class="nav-section">
+        <span class="nav-label">Overview</span>
+        <a href="#architecture" class="nav-item">Arsitektur</a>
+        <a href="#techstack" class="nav-item">Tech Stack</a>
+      </div>
+
+      <div class="nav-section">
+        <span class="nav-label">Development</span>
+        <a href="#setup" class="nav-item">Setup</a>
+        <a href="#api-config" class="nav-item">API Configuration</a>
+      </div>
+
+      <div class="nav-section">
+        <span class="nav-label">Build</span>
+        <a href="#eas-build" class="nav-item">EAS Build</a>
+        <a href="#checklist" class="nav-item">Checklist</a>
+      </div>
+
+      <div class="nav-section">
+        <span class="nav-label">Help</span>
+        <a href="#troubleshooting" class="nav-item">Troubleshooting</a>
+        <a href="#links" class="nav-item">Useful Links</a>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Hero Section -->
+      <section class="hero">
+        <span class="hero-badge">📱 Mobile App</span>
+        <h1>
+          Taaruf Mobile<br /><span class="gradient-text">Build Guide</span>
+        </h1>
+        <p class="hero-subtitle">
+          Panduan lengkap build dan deployment aplikasi mobile Taaruf
+        </p>
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="stat-value">54</span>
+            <span class="stat-label">Expo Version</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">EAS</span>
+            <span class="stat-label">Build Platform</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">APK</span>
+            <span class="stat-label">Output</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Architecture Section -->
+      <section id="architecture" class="section">
+        <div class="section-header">
+          <span class="section-icon">🏗️</span>
+          <h2>Arsitektur Mobile</h2>
+        </div>
+
+        <div class="architecture-diagram">
+          <div class="arch-node">
+            <div class="arch-icon">⚛️</div>
+            <div class="arch-label">Expo/React Native</div>
+            <div class="arch-sublabel">Source Code</div>
+          </div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-node cloudflare">
+            <div class="arch-icon">☁️</div>
+            <div class="arch-label">EAS Build</div>
+            <div class="arch-sublabel">Cloud Build</div>
+          </div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-node">
+            <div class="arch-icon">📦</div>
+            <div class="arch-label">APK File</div>
+            <div class="arch-sublabel">Shareable</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tech Stack Section -->
+      <section id="techstack" class="section">
+        <div class="section-header">
+          <span class="section-icon">⚙️</span>
+          <h2>Tech Stack</h2>
+        </div>
+
+        <div class="table-container">
+          <table class="command-table">
+            <thead>
+              <tr>
+                <th>Component</th>
+                <th>Version</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Expo</td>
+                <td>54.0.31</td>
+              </tr>
+              <tr>
+                <td>React Native</td>
+                <td>0.81.5</td>
+              </tr>
+              <tr>
+                <td>React</td>
+                <td>19.1.0</td>
+              </tr>
+              <tr>
+                <td>React Navigation</td>
+                <td>6.x</td>
+              </tr>
+              <tr>
+                <td>EAS CLI</td>
+                <td>Latest</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Setup Section -->
+      <section id="setup" class="section">
+        <div class="step-header">
+          <div class="step-number">1</div>
+          <div>
+            <h2>Setup Development</h2>
+            <p class="step-desc">
+              Install dependencies dan jalankan development server
+            </p>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">bash</span>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <pre><code>cd mobile
+npm install
+npx expo start</code></pre>
+        </div>
+      </section>
+
+      <!-- API Config Section -->
+      <section id="api-config" class="section">
+        <div class="step-header">
+          <div class="step-number">2</div>
+          <div>
+            <h2>API Configuration</h2>
+            <p class="step-desc">
+              Edit src/services/api.js untuk mengatur API URL
+            </p>
+          </div>
+        </div>
+
+        <div class="prereq-grid">
+          <div class="prereq-card">
+            <div class="prereq-icon">🔧</div>
+            <h3>Development</h3>
+            <p><code>http://10.0.2.2:8000/api</code></p>
+            <small>Android Emulator localhost</small>
+          </div>
+          <div class="prereq-card" style="border-color: #22c55e">
+            <div class="prereq-icon">🚀</div>
+            <h3>Production</h3>
+            <p><code>https://taaruf-api.donarazhar.site/api</code></p>
+            <small>Server production</small>
+          </div>
+        </div>
+      </section>
+
+      <!-- EAS Build Section -->
+      <section id="eas-build" class="section">
+        <div class="step-header">
+          <div class="step-number">3</div>
+          <div>
+            <h2>Build APK dengan EAS</h2>
+            <p class="step-desc">Build APK di cloud menggunakan EAS Build</p>
+          </div>
+        </div>
+
+        <h4 style="margin-bottom: 0.75rem; color: var(--text-secondary)">
+          Login ke EAS:
+        </h4>
+        <div class="code-block small">
+          <pre><code>npx eas login</code></pre>
+        </div>
+
+        <h4 style="margin: 1.25rem 0 0.75rem; color: var(--accent-primary)">
+          Build Command:
+        </h4>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">bash</span>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <pre><code>cd mobile
+npx eas build --platform android --profile preview</code></pre>
+        </div>
+
+        <div class="info-card" style="margin-top: 1rem">
+          <span class="info-icon">ℹ️</span>
+          <div class="info-content">
+            Build berjalan di cloud (~10-15 menit). Setelah selesai, link
+            download APK akan ditampilkan.
+          </div>
+        </div>
+      </section>
+
+      <!-- Checklist Section -->
+      <section id="checklist" class="section">
+        <div class="section-header">
+          <span class="section-icon">📋</span>
+          <h2>Deployment Checklist</h2>
+        </div>
+
+        <div class="steps-list">
+          <div class="step-item">
+            <span class="step-bullet">☐</span> Update API URL ke production
+          </div>
+          <div class="step-item">
+            <span class="step-bullet">☐</span> Pastikan tidak ada folder
+            android/ (Managed Workflow)
+          </div>
+          <div class="step-item">
+            <span class="step-bullet">☐</span> Run npm install
+          </div>
+          <div class="step-item">
+            <span class="step-bullet">☐</span> Run npx eas build --platform
+            android --profile preview
+          </div>
+          <div class="step-item">
+            <span class="step-bullet">☐</span> Tunggu build selesai (~10-15
+            menit)
+          </div>
+          <div class="step-item">
+            <span class="step-bullet">☐</span> Download dan test APK
+          </div>
+          <div class="step-item">
+            <span class="step-bullet">☐</span> Share link APK ke tester
+          </div>
+        </div>
+      </section>
+
+      <!-- Troubleshooting Section -->
+      <section id="troubleshooting" class="section">
+        <div class="section-header">
+          <span class="section-icon">🔧</span>
+          <h2>Troubleshooting</h2>
+        </div>
+
+        <div class="trouble-card">
+          <h3>❌ Kotlin Version Mismatch</h3>
+          <p>
+            <strong>Error:</strong> Compose Compiler requires Kotlin version
+            1.9.25 but using 1.9.24
+          </p>
+          <p>
+            <strong>Penyebab:</strong> Folder android/ mengandung konfigurasi
+            outdated
+          </p>
+          <p><strong>Solusi:</strong></p>
+          <div class="code-block small">
+            <pre><code>rm -rf android
+npx eas build --platform android --profile preview</code></pre>
+          </div>
+        </div>
+
+        <div class="trouble-card">
+          <h3>❌ Module Not Found</h3>
+          <p>
+            <strong>Error:</strong> Unable to resolve module
+            @react-navigation/stack
+          </p>
+          <p><strong>Solusi:</strong></p>
+          <div class="code-block small">
+            <pre><code>npm install @react-navigation/stack</code></pre>
+          </div>
+        </div>
+
+        <div class="trouble-card">
+          <h3>❌ Expo Version Incompatibility</h3>
+          <p><strong>Masalah:</strong> Expo 52 memiliki dependency conflict</p>
+          <p><strong>Solusi:</strong> Upgrade ke Expo 54:</p>
+          <div class="code-block small">
+            <pre><code>rm -rf node_modules package-lock.json
+# Update package.json ke expo ~54.0.31
+npm install</code></pre>
+          </div>
+        </div>
+
+        <div class="warning-card" style="margin-top: 1.5rem">
+          <span class="warning-icon">⚠️</span>
+          <div class="warning-content">
+            <strong>Managed vs Bare Workflow:</strong> Gunakan Managed Workflow
+            (tanpa folder android/) untuk menghindari masalah compatibility. EAS
+            akan auto-generate folder android yang kompatibel.
+          </div>
+        </div>
+      </section>
+
+      <!-- Links Section -->
+      <section id="links" class="section">
+        <div class="section-header">
+          <span class="section-icon">🔗</span>
+          <h2>Useful Links</h2>
+        </div>
+
+        <div class="table-container">
+          <table class="command-table">
+            <thead>
+              <tr>
+                <th>Resource</th>
+                <th>URL</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>EAS Builds</td>
+                <td>
+                  <a
+                    href="https://expo.dev/accounts/donarazhar/projects/taaruf-alazhar/builds"
+                    target="_blank"
+                    >expo.dev/.../builds</a
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td>Expo Docs</td>
+                <td>
+                  <a href="https://docs.expo.dev" target="_blank"
+                    >docs.expo.dev</a
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td>Production API</td>
+                <td>
+                  <a href="https://taaruf-api.donarazhar.site" target="_blank"
+                    >taaruf-api.donarazhar.site</a
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td>Production Web</td>
+                <td>
+                  <a href="https://taaruf.donarazhar.site" target="_blank"
+                    >taaruf.donarazhar.site</a
+                  >
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <p>Dokumentasi dibuat pada 7 Februari 2026</p>
+        <div class="footer-links">
+          <a href="index.html">Cloudflare Tunnel Guide</a>
+          <span>•</span>
+          <a href="deployment-guide.html">Deployment Guide</a>
+          <span>•</span>
+          <a href="mobile-build-guide.html">Mobile Build Guide</a>
+        </div>
+      </footer>
+    </main>
+
+    <script>
+      function copyCode(btn) {
+        const code = btn
+          .closest(".code-block")
+          .querySelector("code").textContent;
+        navigator.clipboard.writeText(code).then(() => {
+          const originalText = btn.textContent;
+          btn.textContent = "✅ Copied!";
+          setTimeout(() => (btn.textContent = originalText), 2000);
+        });
+      }
+
+      // Scroll spy for navigation
+      const sections = document.querySelectorAll("section[id]");
+      const navItems = document.querySelectorAll(".nav-item");
+
+      window.addEventListener("scroll", () => {
+        let current = "";
+        sections.forEach((section) => {
+          const sectionTop = section.offsetTop - 100;
+          if (scrollY >= sectionTop) {
+            current = section.getAttribute("id");
+          }
+        });
+
+        navItems.forEach((item) => {
+          item.classList.remove("active");
+          if (item.getAttribute("href") === `#${current}`) {
+            item.classList.add("active");
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
