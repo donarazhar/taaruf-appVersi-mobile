@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Panduan Cloudflare Tunnel | Dokumentasi</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <span class="logo-icon">☁️</span>
+          <span class="logo-text">CF Tunnel</span>
+        </div>
+      </div>
+
+      <div class="nav-section">
+        <span class="nav-label">Mulai</span>
+        <a href="#prasyarat" class="nav-item">📋 Prasyarat</a>
+      </div>
+
+      <div class="nav-section">
+        <span class="nav-label">Langkah Setup</span>
+        <a href="#step-1" class="nav-item">1. Install Cloudflared</a>
+        <a href="#step-2" class="nav-item">2. Login Cloudflare</a>
+        <a href="#step-3" class="nav-item">3. Buat Tunnel</a>
+        <a href="#step-4" class="nav-item">4. Konfigurasi</a>
+        <a href="#step-5" class="nav-item">5. Routing DNS</a>
+        <a href="#step-6" class="nav-item">6. Test Manual</a>
+        <a href="#step-7" class="nav-item">7. Systemd Service</a>
+        <a href="#step-8" class="nav-item">8. SSL Setup</a>
+      </div>
+
+      <div class="nav-section">
+        <span class="nav-label">Referensi</span>
+        <a href="#troubleshooting" class="nav-item">🔧 Troubleshooting</a>
+        <a href="#commands" class="nav-item">⚡ Perintah</a>
+        <a href="#architecture" class="nav-item">🏗️ Arsitektur</a>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Hero Section -->
+      <header class="hero">
+        <div class="hero-badge">Dokumentasi</div>
+        <h1>
+          Panduan Setup <span class="gradient-text">Cloudflare Tunnel</span>
+        </h1>
+        <p class="hero-subtitle">
+          Hubungkan server lokal/VPS ke domain publik tanpa IP public atau port
+          forwarding
+        </p>
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="stat-value">8</span>
+            <span class="stat-label">Langkah</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">15</span>
+            <span class="stat-label">Menit</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">Gratis</span>
+            <span class="stat-label">Biaya</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Prerequisites -->
+      <section id="prasyarat" class="section">
+        <div class="section-header">
+          <span class="section-icon">📋</span>
+          <h2>Prasyarat</h2>
+        </div>
+        <div class="prereq-grid">
+          <div class="prereq-card">
+            <div class="prereq-icon">☁️</div>
+            <h3>Akun Cloudflare</h3>
+            <p>Gratis, daftar di cloudflare.com</p>
+          </div>
+          <div class="prereq-card">
+            <div class="prereq-icon">🌐</div>
+            <h3>Domain</h3>
+            <p>Domain terdaftar di Cloudflare DNS</p>
+          </div>
+          <div class="prereq-card">
+            <div class="prereq-icon">🖥️</div>
+            <h3>Server Linux</h3>
+            <p>Ubuntu/Debian dengan akses root</p>
+          </div>
+          <div class="prereq-card">
+            <div class="prereq-icon">⚙️</div>
+            <h3>Aplikasi</h3>
+            <p>API/Web yang berjalan di localhost</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Step 1 -->
+      <section id="step-1" class="section">
+        <div class="step-header">
+          <div class="step-number">1</div>
+          <div>
+            <h2>Install Cloudflared</h2>
+            <p class="step-desc">Download dan install cloudflared di server</p>
+          </div>
+        </div>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">bash</span>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <pre><code># Download dan install cloudflared
+curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb -o cloudflared.deb
+sudo dpkg -i cloudflared.deb
+
+# Verifikasi instalasi
+cloudflared --version</code></pre>
+        </div>
+      </section>
+
+      <!-- Step 2 -->
+      <section id="step-2" class="section">
+        <div class="step-header">
+          <div class="step-number">2</div>
+          <div>
+            <h2>Login ke Cloudflare</h2>
+            <p class="step-desc">
+              Autentikasi cloudflared dengan akun Cloudflare
+            </p>
+          </div>
+        </div>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">bash</span>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <pre><code>cloudflared tunnel login</code></pre>
+        </div>
+        <div class="info-card">
+          <div class="info-icon">💡</div>
+          <div class="info-content">
+            <strong>Tip:</strong> Perintah ini akan menampilkan URL. Buka URL
+            tersebut di browser, login ke Cloudflare, pilih domain, lalu klik
+            <strong>Authorize</strong>.
+          </div>
+        </div>
+      </section>
+
+      <!-- Step 3 -->
+      <section id="step-3" class="section">
+        <div class="step-header">
+          <div class="step-number">3</div>
+          <div>
+            <h2>Buat Tunnel Baru</h2>
+            <p class="step-desc">Buat tunnel dengan nama yang mudah diingat</p>
+          </div>
+        </div>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">bash</span>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <pre><code># Buat tunnel dengan nama (contoh: myapp)
+cloudflared tunnel create myapp
+
+# Lihat daftar tunnel
+cloudflared tunnel list</code></pre>
+        </div>
+        <div class="warning-card">
+          <div class="warning-icon">⚠️</div>
+          <div class="warning-content">
+            <strong>Penting:</strong> Simpan <strong>Tunnel ID</strong> (UUID)
+            yang ditampilkan. Anda akan membutuhkannya untuk konfigurasi.
+          </div>
+        </div>
+      </section>
+
+      <!-- Step 4 -->
+      <section id="step-4" class="section">
+        <div class="step-header">
+          <div class="step-number">4</div>
+          <div>
+            <h2>Buat File Konfigurasi</h2>
+            <p class="step-desc">Mapping hostname ke service lokal</p>
+          </div>
+        </div>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">bash</span>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <pre><code>sudo mkdir -p /etc/cloudflared
+sudo nano /etc/cloudflared/config.yml</code></pre>
+        </div>
+        <p class="section-text">Isi file dengan konfigurasi berikut:</p>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">yaml</span>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <pre><code>tunnel: &lt;TUNNEL-ID&gt;
+credentials-file: /root/.cloudflared/&lt;TUNNEL-ID&gt;.json
+
+ingress:
+  # Subdomain untuk API (port 8000)
+  - hostname: api.example.com
+    service: http://localhost:8000
+  
+  # Domain utama untuk Web (port 80)
+  - hostname: example.com
+    service: http://localhost:80
+  
+  # Catch-all rule (wajib ada di akhir)
+  - service: http_status:404</code></pre>
+        </div>
+      </section>
+
+      <!-- Step 5 -->
+      <section id="step-5" class="section">
+        <div class="step-header">
+          <div class="step-number">5</div>
+          <div>
+            <h2>Routing DNS ke Tunnel</h2>
+            <p class="step-desc">Hubungkan hostname ke tunnel</p>
+          </div>
+        </div>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">bash</span>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <pre><code># Untuk domain utama
+cloudflared tunnel route dns myapp example.com
+
+# Untuk subdomain API
+cloudflared tunnel route dns myapp api.example.com</code></pre>
+        </div>
+        <div class="info-card">
+          <div class="info-icon">✨</div>
+          <div class="info-content">
+            Perintah ini otomatis membuat CNAME record di Cloudflare DNS.
+          </div>
+        </div>
+      </section>
+
+      <!-- Step 6 -->
+      <section id="step-6" class="section">
+        <div class="step-header">
+          <div class="step-number">6</div>
+          <div>
+            <h2>Test Tunnel Manual</h2>
+            <p class="step-desc">Jalankan tunnel untuk testing</p>
+          </div>
+        </div>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">bash</span>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <pre><code>cloudflared tunnel run myapp</code></pre>
+        </div>
+        <p class="section-text">
+          Buka browser dan akses domain Anda. Jika berhasil, lanjut ke langkah
+          berikutnya.
+        </p>
+      </section>
+
+      <!-- Step 7 -->
+      <section id="step-7" class="section">
+        <div class="step-header">
+          <div class="step-number">7</div>
+          <div>
+            <h2>Setup Systemd Service</h2>
+            <p class="step-desc">Agar tunnel berjalan otomatis saat boot</p>
+          </div>
+        </div>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">bash</span>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <pre><code>sudo nano /etc/systemd/system/cloudflared.service</code></pre>
+        </div>
+        <p class="section-text">Isi dengan:</p>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">ini</span>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <pre><code>[Unit]
+Description=cloudflared
+After=network.target
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/bin/cloudflared --no-autoupdate --config /etc/cloudflared/config.yml tunnel run myapp
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target</code></pre>
+        </div>
+        <p class="section-text">Aktifkan dan jalankan service:</p>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">bash</span>
+            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+          </div>
+          <pre><code>sudo systemctl daemon-reload
+sudo systemctl enable cloudflared
+sudo systemctl start cloudflared
+sudo systemctl status cloudflared</code></pre>
+        </div>
+      </section>
+
+      <!-- Step 8 -->
+      <section id="step-8" class="section">
+        <div class="step-header">
+          <div class="step-number">8</div>
+          <div>
+            <h2>Konfigurasi SSL</h2>
+            <p class="step-desc">Setup SSL di Cloudflare Dashboard</p>
+          </div>
+        </div>
+        <div class="steps-list">
+          <div class="step-item">
+            <span class="step-bullet">1</span>
+            <span
+              >Login ke
+              <a href="https://dash.cloudflare.com" target="_blank"
+                >dash.cloudflare.com</a
+              ></span
+            >
+          </div>
+          <div class="step-item">
+            <span class="step-bullet">2</span>
+            <span>Pilih domain Anda</span>
+          </div>
+          <div class="step-item">
+            <span class="step-bullet">3</span>
+            <span
+              >Buka <strong>SSL/TLS</strong> → <strong>Overview</strong></span
+            >
+          </div>
+          <div class="step-item">
+            <span class="step-bullet">4</span>
+            <span
+              >Set mode ke <strong>Flexible</strong> atau
+              <strong>Full</strong></span
+            >
+          </div>
+        </div>
+      </section>
+
+      <!-- Troubleshooting -->
+      <section id="troubleshooting" class="section">
+        <div class="section-header">
+          <span class="section-icon">🔧</span>
+          <h2>Troubleshooting</h2>
+        </div>
+
+        <div class="trouble-card">
+          <h3>❌ Error: Route [login] not defined (Laravel)</h3>
+          <p>Tambahkan exception handler di <code>bootstrap/app.php</code>:</p>
+          <div class="code-block small">
+            <pre><code>use Symfony\Component\Routing\Exception\RouteNotFoundException;
+
+->withExceptions(function (Exceptions $exceptions): void {
+    $exceptions->render(function (RouteNotFoundException $e, Request $request) {
+        if ($request->is('api/*') || $request->expectsJson()) {
+            return response()->json(['message' => 'Unauthenticated.'], 401);
+        }
+    });
+})</code></pre>
+          </div>
+        </div>
+
+        <div class="trouble-card">
+          <h3>❌ SSL Certificate Not Covering Hostname</h3>
+          <div class="steps-list">
+            <div class="step-item">
+              <span class="step-bullet">1</span>
+              <span
+                >Di Cloudflare: <strong>SSL/TLS</strong> →
+                <strong>Edge Certificates</strong></span
+              >
+            </div>
+            <div class="step-item">
+              <span class="step-bullet">2</span>
+              <span>Disable Universal SSL</span>
+            </div>
+            <div class="step-item">
+              <span class="step-bullet">3</span>
+              <span>Tunggu 1-2 menit</span>
+            </div>
+            <div class="step-item">
+              <span class="step-bullet">4</span>
+              <span>Enable Universal SSL lagi</span>
+            </div>
+            <div class="step-item">
+              <span class="step-bullet">5</span>
+              <span>Tunggu 5-15 menit untuk certificate ter-generate</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Commands Reference -->
+      <section id="commands" class="section">
+        <div class="section-header">
+          <span class="section-icon">⚡</span>
+          <h2>Perintah Berguna</h2>
+        </div>
+        <div class="table-container">
+          <table class="command-table">
+            <thead>
+              <tr>
+                <th>Perintah</th>
+                <th>Fungsi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>cloudflared tunnel list</code></td>
+                <td>Lihat semua tunnel</td>
+              </tr>
+              <tr>
+                <td><code>cloudflared tunnel info &lt;name&gt;</code></td>
+                <td>Info detail tunnel</td>
+              </tr>
+              <tr>
+                <td>
+                  <code
+                    >cloudflared tunnel route dns &lt;tunnel&gt;
+                    &lt;hostname&gt;</code
+                  >
+                </td>
+                <td>Tambah DNS route</td>
+              </tr>
+              <tr>
+                <td><code>cloudflared tunnel cleanup &lt;tunnel&gt;</code></td>
+                <td>Hapus koneksi lama</td>
+              </tr>
+              <tr>
+                <td><code>cloudflared tunnel delete &lt;tunnel&gt;</code></td>
+                <td>Hapus tunnel</td>
+              </tr>
+              <tr>
+                <td><code>systemctl status cloudflared</code></td>
+                <td>Status service</td>
+              </tr>
+              <tr>
+                <td><code>journalctl -u cloudflared -f</code></td>
+                <td>Lihat log realtime</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Architecture -->
+      <section id="architecture" class="section">
+        <div class="section-header">
+          <span class="section-icon">🏗️</span>
+          <h2>Arsitektur</h2>
+        </div>
+        <div class="architecture-diagram">
+          <div class="arch-node browser">
+            <div class="arch-icon">🌐</div>
+            <div class="arch-label">Browser</div>
+            <div class="arch-sublabel">example.com</div>
+          </div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-node cloudflare">
+            <div class="arch-icon">☁️</div>
+            <div class="arch-label">Cloudflare</div>
+            <div class="arch-sublabel">Edge Network</div>
+          </div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-node server">
+            <div class="arch-icon">🖥️</div>
+            <div class="arch-label">Server</div>
+            <div class="arch-sublabel">cloudflared</div>
+          </div>
+        </div>
+        <div class="arch-features">
+          <div class="arch-feature">
+            <span class="check">✓</span> SSL/TLS Encryption
+          </div>
+          <div class="arch-feature">
+            <span class="check">✓</span> DDoS Protection
+          </div>
+          <div class="arch-feature">
+            <span class="check">✓</span> No IP Exposure
+          </div>
+          <div class="arch-feature">
+            <span class="check">✓</span> Zero Trust Security
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <p>📚 Dokumentasi ini dibuat untuk membantu setup Cloudflare Tunnel</p>
+        <div class="footer-links">
+          <a
+            href="https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/"
+            target="_blank"
+            >Cloudflare Docs</a
+          >
+          <span>•</span>
+          <a href="https://github.com/cloudflare/cloudflared" target="_blank"
+            >GitHub</a
+          >
+        </div>
+      </footer>
+    </main>
+
+    <script>
+      // Copy code functionality
+      function copyCode(btn) {
+        const codeBlock = btn.closest(".code-block");
+        const code = codeBlock.querySelector("code").textContent;
+        navigator.clipboard.writeText(code).then(() => {
+          btn.textContent = "✓ Copied!";
+          setTimeout(() => {
+            btn.textContent = "📋 Copy";
+          }, 2000);
+        });
+      }
+
+      // Active nav item on scroll
+      const sections = document.querySelectorAll("section[id]");
+      const navItems = document.querySelectorAll(".nav-item");
+
+      window.addEventListener("scroll", () => {
+        let current = "";
+        sections.forEach((section) => {
+          const sectionTop = section.offsetTop;
+          if (scrollY >= sectionTop - 100) {
+            current = section.getAttribute("id");
+          }
+        });
+
+        navItems.forEach((item) => {
+          item.classList.remove("active");
+          if (item.getAttribute("href") === `#${current}`) {
+            item.classList.add("active");
+          }
+        });
+      });
+
+      // Smooth scroll
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute("href"));
+          if (target) {
+            target.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
